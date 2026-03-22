@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giuseppehub.store | Premium Digital Agency</title>
+  <link rel="icon" href="./assets/favicon.png" type="image/png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            secondary: '#8b5cf6',
+            accent: '#ec4899',
+            dark: '#ffffff',
+            white: '#000000',
+            slate: {
+              100: '#0f172a',
+              200: '#1e293b',
+              300: '#334155',
+              400: '#475569',
+              500: '#64748b',
+              600: '#94a3b8',
+              700: '#cbd5e1',
+              800: '#e2e8f0',
+              900: '#f1f5f9',
+            }
+          },
+          fontFamily: {
+            jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer base {
+          body {
+            @apply bg-dark text-slate-100 antialiased font-jakarta overflow-x-hidden;
+          }
+        }
+
+        @layer components {
+            .glass {
+                @apply bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)];
+            }
+            .glass-hover {
+                @apply transition-all duration-500 hover:bg-white/10 hover:border-white/20 hover:shadow-[0_0_40px_rgba(59,130,246,0.2)];
+            }
+            .text-gradient {
+                background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+                @apply bg-clip-text text-transparent;
+            }
+            .btn-primary {
+                @apply relative overflow-hidden px-8 py-4 rounded-full font-bold transition-all duration-500 transform hover:scale-105 active:scale-95;
+                background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+                background-size: 200% auto;
+            }
+            .btn-primary:hover {
+                background-position: right center;
+                @apply shadow-[0_0_30px_rgba(59,130,246,0.6)];
+            }
+            .btn-outline {
+                @apply px-8 py-4 rounded-full font-bold transition-all duration-500 border border-white/20 glass hover:border-white/40 hover:bg-white/10 hover:scale-105;
+            }
+            .service-card {
+                @apply glass p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] relative overflow-hidden transition-all duration-700 hover:-translate-y-4 hover:shadow-[0_20px_50px_rgba(59,130,246,0.2)] border-white/5 hover:border-white/20;
+            }
+            .service-card::after {
+                content: '';
+                @apply absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 transition-opacity duration-500;
+            }
+            .service-card:hover::after {
+                @apply opacity-100;
+            }
+        }
+
+        /* Custom Styles & Animations */
+        .aura {
+            @apply absolute rounded-full blur-[120px] pointer-events-none opacity-20 animate-pulse;
+        }
+
+        .bg-grid {
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+            background-image: 
+                linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        #progress-bar {
+            @apply fixed top-0 left-0 z-[100] h-1 w-0 transition-all duration-150;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+        }
+
+        .reveal-up, .reveal-left, .reveal-right {
+            @apply opacity-0;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { @apply bg-dark; }
+        ::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full hover:bg-white/20; }
+
+        #mobile-menu {
+            @apply fixed inset-0 z-[60] bg-dark/95 backdrop-blur-3xl flex flex-col p-12 transition-transform duration-700 translate-x-full;
+        }
+        #mobile-menu.active { @apply translate-x-0; }
+        
+        .nav-link:hover::after { @apply w-full; }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            @apply fixed top-0 left-0 w-8 h-8 pointer-events-none z-[100] mix-blend-difference hidden lg:block;
+        }
+        .cursor-dot {
+            @apply absolute inset-0 bg-white rounded-full transition-transform duration-300 scale-50;
+        }
+        .cursor-ring {
+            @apply absolute -inset-2 border border-white/30 rounded-full transition-transform duration-500;
+        }
+
+        /* Flashlight Effect */
+        #flashlight {
+            @apply fixed inset-0 z-0 pointer-events-none opacity-0 transition-opacity duration-1000;
+            background: radial-gradient(600px circle at var(--x) var(--y), rgba(59, 130, 246, 0.15), transparent 80%);
+        }
+
+        /* Particle System */
+        .particle {
+            @apply absolute bg-white rounded-full pointer-events-none opacity-10;
+        }
+
+        /* Ticker */
+        .ticker-container {
+            @apply fixed bottom-0 left-0 w-full glass z-[55] overflow-hidden py-3 border-t border-white/10;
+        }
+        .ticker-wrap {
+            @apply flex whitespace-nowrap animate-marquee;
+        }
+        .ticker-item {
+            @apply px-10 text-xs font-black uppercase tracking-[0.3em] text-slate-400 hover:text-primary transition-colors cursor-pointer;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            animation: marquee 20s linear infinite;
+        }
+
+        /* Looping Text Slider */
+        .text-slider-container {
+            @apply relative inline-flex h-[1.3em] align-middle overflow-hidden pb-4;
+        }
+        .text-slider-item {
+            @apply absolute left-0 top-0 w-full whitespace-nowrap leading-none py-2 px-16;
+        }
+    </style>
+  <script src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js" type="module"></script>
+</head>
+
+<body class="selection:bg-primary/30">
+
+  <div id="progress-bar"></div>
+  <div id="custom-cursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+  </div>
+  <div id="flashlight"></div>
+  <div id="particle-container" class="fixed inset-0 z-0 pointer-events-none"></div>
+
+  <!-- Developer Ticker -->
+  <a href="https://wa.me/2349137881452" target="_blank" class="ticker-container">
+    <div class="ticker-wrap">
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+      <div class="ticker-item">made by AkutheDev</div>
+    </div>
+  </a>
+
+  <!-- Background Elements -->
+  <div class="fixed inset-0 z-0 overflow-hidden">
+    <div class="aura w-[150vw] sm:w-[800px] h-[150vw] sm:h-[800px] bg-blue-600 top-[-10%] left-[-10%]"></div>
+    <div class="aura w-[120vw] sm:w-[600px] h-[120vw] sm:h-[600px] bg-purple-600 bottom-[-10%] right-[-10%]"></div>
+    <div class="aura w-[80vw] sm:w-[400px] h-[80vw] sm:h-[400px] bg-pink-600 top-[40%] left-[60%]" style="animation-delay: 2s"></div>
+    <div class="absolute inset-0 bg-grid"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-8 px-6 transition-all duration-500">
+    <div class="max-w-7xl mx-auto flex justify-between items-center glass rounded-full px-10 py-5 border-white/5">
+      <a href="#" class="text-3xl font-black text-white tracking-tighter flex items-center gap-2">
+        GIUSEPPEHUB<span class="text-primary italic">.store</span>
+      </a>
+
+      <div class="hidden lg:flex items-center space-x-12">
+        <a href="#about" class="nav-link">About Us</a>
+        <a href="#services" class="nav-link">Service Hub</a>
+        <a href="#why-us" class="nav-link">The Difference</a>
+        <a href="#contact" class="nav-link text-gradient !text-white">Direct Access</a>
+
+        <div class="flex items-center space-x-4 border-l border-white/10 pl-10">
+          <a href="https://wa.me/2348143168513" target="_blank"
+            class="p-3 glass rounded-full text-green-400 hover:bg-green-400/10 transition-all">
+            <i data-lucide="message-square" class="w-6 h-6"></i>
+          </a>
+          <a href="tel:+2348143168513" class="btn-primary !px-6 !py-3 text-sm">Call Now</a>
+        </div>
+      </div>
+
+      <button class="lg:hidden text-white" id="menu-btn">
+        <i data-lucide="align-right" class="w-9 h-9"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu">
+    <div class="flex justify-between items-center mb-16">
+      <span class="text-2xl font-black">NAVIGATE</span>
+      <button class="text-white" id="menu-close"><i data-lucide="x" class="w-10 h-10"></i></button>
+    </div>
+    <div class="flex flex-col gap-10">
+      <a href="#about" class="text-5xl font-black hover:text-primary transition-colors mobile-click">ABOUT</a>
+      <a href="#services" class="text-5xl font-black hover:text-primary transition-colors mobile-click">SERVICES</a>
+      <a href="#why-us" class="text-5xl font-black hover:text-primary transition-colors mobile-click">WHY US</a>
+      <a href="#contact" class="text-5xl font-black text-gradient mobile-click">HIRE US</a>
+    </div>
+    <div class="mt-auto pt-10 flex gap-6">
+      <a href="https://wa.me/2348143168513" target="_blank" class="flex-1 btn-primary text-center">WHATSAPP</a>
+      <a href="tel:+2348143168513" class="flex-1 btn-outline text-center">CALL</a>
+    </div>
+  </div>
+
+  <main class="relative z-10">
+    <!-- Hero Section -->
+    <section class="min-h-screen relative overflow-hidden flex items-center justify-center">
+      <!-- Spline 3D Scene Integration (Full Screen) -->
+      <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
+        <spline-viewer url="https://prod.spline.design/PBQQBw8bfXDhBo7w/scene.splinecode" events-target="global"
+          style="width: 100%; height: 100%;"></spline-viewer>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 pt-32 sm:pt-40 pb-20 relative z-10 w-full">
+        <div class="text-center relative">
+          <div
+            class="reveal-up inline-flex items-center gap-3 px-6 py-2.5 rounded-full glass border-white/10 text-primary text-xs font-black uppercase tracking-[0.3em] mb-10">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+            </span>
+            Premier Digital Powerhouse
+          </div>
+
+          <h1
+            class="reveal-up text-4xl sm:text-5xl md:text-8xl lg:text-[10rem] font-black leading-[0.9] tracking-tighter mb-12 text-white">
+            SCALE YOUR <br>
+            <span id="typewriter-income" class="text-gradient drop-shadow-[0_0_50px_rgba(59,130,246,0.3)]"></span>
+            <span class="animate-pulse text-primary font-light">|</span>
+          </h1>
+
+          <p class="reveal-up text-xl md:text-3xl text-slate-400 max-w-4xl mx-auto leading-relaxed font-medium mb-16">
+            Giuseppehub.store is your elite destination for premium eBooks,
+            professional courses, and high-impact digital solutions.
+            <span class="text-white">Results-driven. Professional. Premium.</span>
+          </p>
+
+          <div class="reveal-up flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center items-center w-full px-4 sm:px-0">
+            <a href="https://wa.me/2348143168513" target="_blank"
+              class="btn-primary w-full sm:w-auto py-5 sm:py-7 px-8 sm:px-16 text-xl sm:text-2xl font-black shadow-[0_0_40px_rgba(37,99,235,0.4)] text-center">
+              GET STARTED NOW
+            </a>
+            <a href="tel:+2348143168513" class="btn-outline w-full sm:w-auto py-5 sm:py-7 px-8 sm:px-16 text-xl sm:text-2xl font-black text-center">
+              TALK TO AGENT
+            </a>
+          </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="reveal-up mt-24 flex flex-col items-center gap-4">
+          <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Scroll to explore</span>
+          <div class="w-px h-24 bg-gradient-to-b from-primary to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 sm:py-40 max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div class="reveal-left">
+          <div class="relative">
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl"></div>
+            <h2 class="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-8 sm:mb-10 leading-[0.95]">
+              WE EMPOWER <br>
+              <span class="text-gradient">THE MODERN <br> CREATOR.</span>
+            </h2>
+            <div class="space-y-8">
+              <p class="text-2xl text-slate-300 leading-relaxed font-medium">
+                Giuseppehub.store is an online store where you can buy different kinds of eBooks and online courses
+                designed
+                to help you generate income daily.
+              </p>
+              <p class="text-xl text-slate-500 leading-relaxed">
+                We provide elite business services that help individuals and entrepreneurs grow online.
+                Our platform is built on trust, efficiency, and the goal of empowering the next
+                generation of African digital entrepreneurs.
+              </p>
+            </div>
+            <div class="mt-16 grid grid-cols-2 gap-12">
+              <div class="glass p-8 rounded-3xl group">
+                <span
+                  class="block text-5xl font-black text-white mb-2 group-hover:text-primary transition-colors">5k+</span>
+                <span class="text-xs font-black text-slate-500 uppercase tracking-widest">Active Clients</span>
+              </div>
+              <div class="glass p-8 rounded-3xl group">
+                <span
+                  class="block text-5xl font-black text-white mb-2 group-hover:text-primary transition-colors">100%</span>
+                <span class="text-xs font-black text-slate-500 uppercase tracking-widest">Trust Rate</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-right grid grid-cols-2 gap-4 sm:gap-8 relative mt-16 lg:mt-0">
+          <div class="about-boxes-container space-y-8 pt-24">
+            <div
+              class="about-box aspect-[4/5] glass rounded-[3rem] p-1 flex items-center justify-center overflow-hidden group">
+              <div
+                class="w-full h-full bg-gradient-to-br from-[#1877F2]/20 to-transparent flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                <i data-lucide="facebook"
+                  class="w-16 h-16 text-[#1877F2] drop-shadow-[0_0_20px_rgba(24,119,242,0.5)]"></i>
+              </div>
+            </div>
+            <div
+              class="about-box aspect-square glass rounded-[3rem] p-1 flex items-center justify-center overflow-hidden group">
+              <div
+                class="w-full h-full bg-gradient-to-tr from-[#0A66C2]/20 to-transparent flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                <i data-lucide="linkedin"
+                  class="w-16 h-16 text-[#0A66C2] drop-shadow-[0_0_20px_rgba(10,102,194,0.5)]"></i>
+              </div>
+            </div>
+          </div>
+          <div class="about-boxes-container space-y-8">
+            <div
+              class="about-box aspect-square glass rounded-[3rem] p-1 flex items-center justify-center overflow-hidden group">
+              <div
+                class="about-box-inner w-full h-full bg-gradient-to-bl from-[#1DA1F2]/20 to-transparent flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                <i data-lucide="twitter"
+                  class="w-16 h-16 text-[#1DA1F2] drop-shadow-[0_0_20px_rgba(29,161,242,0.5)]"></i>
+              </div>
+            </div>
+            <div
+              class="about-box aspect-[4/5] glass rounded-[3rem] p-1 flex items-center justify-center overflow-hidden group">
+              <div
+                class="w-full h-full bg-gradient-to-br from-[#003087]/20 to-transparent flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                <svg class="w-16 h-16 text-[#003087] drop-shadow-[0_0_20px_rgba(0,48,135,0.5)]" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <path
+                    d="M20.067 8.178c0 2.877-2.882 4.497-5.99 4.497h-1.313l-1.044 6.313a.417.417 0 0 1-.412.349H8.435a.214.214 0 0 1-.21-.248l1.496-9.117a.417.417 0 0 1 .412-.349h3.407c1.7 0 2.55.85 2.55 2.55a.417.417 0 0 1-.417.417h-1.921c-.248 0-.34.131-.34.131l-.228 1.432s.065.131.313.131h2.152c1.944 0 2.916.972 2.916 2.916l.006-.002zm-3.83-4.414H9.554l-.412 2.508c-.02.124-.124.21-.25.21H6.13a.417.417 0 0 0-.412.349L3.937 18.27a.214.214 0 0 0 .21.248h2.873a.417.417 0 0 0 .412-.349l1.496-9.117a.214.214 0 0 1 .21-.174h2.508a.417.417 0 0 1 .417.417c0 1.275.637 1.913 1.913 1.913h2.186c2.31 0 3.465-1.155 3.465-3.465 0-2.31-1.155-3.465-3.465-3.465l-.014-.002z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 md:py-40 px-6 max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-end gap-10 mb-24 reveal-up">
+        <div class="max-w-2xl">
+          <h2 class="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter">
+            ELITE <span class="text-gradient">SERVICES</span>
+          </h2>
+          <p class="text-xl text-slate-400 font-medium">
+            Powerful digital solutions tailored for high-growth businesses and individual success.
+          </p>
+        </div>
+        <a href="https://wa.me/2348143168513" target="_blank" class="btn-outline mb-4">View All Services</a>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8" id="service-grid">
+        <!-- Card 1 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-blue-600/10 flex items-center justify-center text-blue-400 mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="credit-card" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">PayPal Hub
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Elite PayPal account
+            creation and professional management for global transactions.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-purple-600/10 flex items-center justify-center text-purple-400 mb-10 group-hover:bg-purple-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="palette" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">Brand Design
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Stunning visual
+            identities and elite branding for high-impact entrepreneurs.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-pink-600/10 flex items-center justify-center text-pink-400 mb-10 group-hover:bg-pink-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="file-check-2" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">TIN Services
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Rapid Tax
+            Identification registration and number recovery at elite speeds.</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-green-600/10 flex items-center justify-center text-green-400 mb-10 group-hover:bg-green-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="smartphone" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">WhatsApp Exp
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Advanced ban
+            restoration and business automation tools for mass scaling.</p>
+        </div>
+        <!-- Card 5 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-cyan-600/10 flex items-center justify-center text-cyan-400 mb-10 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="shield-check" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">BVN & Bank
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Plastic BVN cards and
+            account opening with National ID anywhere in Africa.</p>
+        </div>
+        <!-- Card 6 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-orange-600/10 flex items-center justify-center text-orange-400 mb-10 group-hover:bg-orange-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="shopping-cart" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">E-Com Stores
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Turnkey online stores
+            optimized for maximum sales across all platforms.</p>
+        </div>
+        <!-- Card 7 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-yellow-600/10 flex items-center justify-center text-yellow-400 mb-10 group-hover:bg-yellow-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="user-plus" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">NIN
+            Solutions</h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Validation,
+            retrieval, and corrections for names, age, and phone numbers.</p>
+        </div>
+        <!-- Card 8 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-rose-600/10 flex items-center justify-center text-rose-400 mb-10 group-hover:bg-rose-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="building-2" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">CAC Register
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Legally register your
+            business and get your master certificate fast.</p>
+        </div>
+        <!-- Card 9 -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-emerald-600/10 flex items-center justify-center text-emerald-400 mb-10 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="graduation-cap" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">Expert Hub
+          </h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Academic checks,
+            exams recovery, and professional course access.</p>
+        </div>
+        <!-- Card 10: Graphics Design -->
+        <div class="service-card group">
+          <div
+            class="w-20 h-20 rounded-3xl bg-indigo-600/10 flex items-center justify-center text-indigo-400 mb-10 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+            <i data-lucide="pen-tool" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-5 group-hover:text-primary transition-colors italic">Graphics
+            Design</h3>
+          <p class="text-lg text-slate-400 group-hover:text-slate-200 leading-relaxed font-medium">Premium visual
+            designs, flyers, logos, and branding materials that make your business stand out.</p>
+        </div>
+        <!-- Card 11: WAEC -->
+        <div class="service-card group !p-0 min-h-[400px] flex flex-col justify-end">
+          <img src="./assets/waec.jpg" alt="WAEC Pins" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/70 to-transparent"></div>
+          <div class="relative z-10 p-8 sm:p-10">
+            <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white mb-6">
+                <i data-lucide="award" class="w-6 h-6 drop-shadow-md"></i>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-black text-white mb-3 group-hover:text-white transition-colors italic drop-shadow-lg">WAEC Pins</h3>
+            <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium drop-shadow-md">Instant PIN delivery for WAEC result checking. Fast, secure, and hassle-free.</p>
+          </div>
+        </div>
+        <!-- Card 12: NECO -->
+        <div class="service-card group !p-0 min-h-[400px] flex flex-col justify-end">
+          <img src="./assets/neco.jpg" alt="NECO Pins" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/70 to-transparent"></div>
+          <div class="relative z-10 p-8 sm:p-10">
+            <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white mb-6">
+                <i data-lucide="shield-check" class="w-6 h-6 drop-shadow-md"></i>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-black text-white mb-3 group-hover:text-white transition-colors italic drop-shadow-lg">NECO Tokens</h3>
+            <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium drop-shadow-md">Purchase NECO result checking tokens securely. Guaranteed instant delivery.</p>
+          </div>
+        </div>
+        <!-- Card 13: NABTEB -->
+        <div class="service-card group !p-0 min-h-[400px] flex flex-col justify-end">
+          <img src="./assets/nabteb.jpg" alt="NABTEB Pins" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/70 to-transparent"></div>
+          <div class="relative z-10 p-8 sm:p-10">
+            <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-white mb-6">
+                <i data-lucide="check-circle" class="w-6 h-6 drop-shadow-md"></i>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-black text-white mb-3 group-hover:text-white transition-colors italic drop-shadow-lg">NABTEB Pins</h3>
+            <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium drop-shadow-md">Buy NABTEB pins with zero delays. Seamless verification for your academic records.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="why-us" class="py-24 md:py-40 px-6 max-w-7xl mx-auto">
+      <div class="glass-dark p-8 md:p-32 rounded-[3rem] md:rounded-[5rem] relative overflow-hidden">
+        <div class="absolute top-[-20%] right-[-20%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px]"></div>
+
+        <div class="relative z-10 grid lg:grid-cols-2 gap-24 items-center">
+          <div class="reveal-left">
+            <h2 class="text-6xl md:text-8xl font-black text-white mb-12 tracking-tighter leading-none">
+              WHY WE <br><span class="text-gradient">DOMINATE.</span>
+            </h2>
+            <div class="space-y-12">
+              <div class="flex gap-8 group">
+                <div
+                  class="w-14 h-14 rounded-2xl glass flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shrink-0">
+                  <i data-lucide="zap" class="w-7 h-7"></i>
+                </div>
+                <div>
+                  <h4 class="text-2xl font-black text-white mb-3 tracking-tight">Relentless Speed</h4>
+                  <p class="text-slate-500 text-lg leading-relaxed">We deliver services at the speed of thought. No
+                    delays, just results.</p>
+                </div>
+              </div>
+              <div class="flex gap-8 group">
+                <div
+                  class="w-14 h-14 rounded-2xl glass flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shrink-0">
+                  <i data-lucide="shield" class="w-7 h-7"></i>
+                </div>
+                <div>
+                  <h4 class="text-2xl font-black text-white mb-3 tracking-tight">Unshakable Trust</h4>
+                  <p class="text-slate-500 text-lg leading-relaxed">Joined by thousands of entrepreneurs who demand
+                    absolute professionalism.</p>
+                </div>
+              </div>
+              <div class="flex gap-8 group">
+                <div
+                  class="w-14 h-14 rounded-2xl glass flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shrink-0">
+                  <i data-lucide="heart-handshake" class="w-7 h-7"></i>
+                </div>
+                <div>
+                  <h4 class="text-2xl font-black text-white mb-3 tracking-tight">Expert Support</h4>
+                  <p class="text-slate-500 text-lg leading-relaxed">Our elite support team is active 24/7 to solve your
+                    problems instantly.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="relative flex flex-col items-center">
+            <!-- Large Success Portrait -->
+            <div
+              class="reveal-success-portrait relative w-full max-w-lg mb-12 lg:mb-0 lg:absolute lg:-right-20 lg:top-1/2 lg:-translate-y-1/2 opacity-0 lg:opacity-100 transition-opacity duration-1000">
+              <img src="assets/chief-portrait.png" alt="Success"
+                class="w-full rounded-[4rem] shadow-2xl border border-white/10 filter contrast-[1.1] grayscale-[0.2] hover:grayscale-0 transition-all duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent rounded-[4rem]">
+              </div>
+            </div>
+
+            <!-- Testimonial Card (Floating) -->
+            <div
+              class="reveal-testimonial-card glass p-10 md:p-12 rounded-[4rem] border-white/10 relative z-10 max-w-xl self-end mt-12 lg:mt-32 hover:scale-[1.02] transition-transform duration-500">
+              <i data-lucide="quote" class="w-20 h-20 text-primary/30 absolute top-[-10px] left-8"></i>
+              <p
+                class="text-2xl md:text-3xl font-black text-white italic leading-tight mb-10 relative z-10 pt-10 px-4 mt-8">
+                "Giuseppehub.store transformed my digital presence. Their speed and professionalism are unmatched in
+                Africa."
+              </p>
+              <div class="flex items-center gap-6">
+                <img src="assets/chief-portrait.png" alt="Chief Giuseppe"
+                  class="w-16 h-16 rounded-full object-cover shadow-xl shadow-primary/20 border-2 border-primary/30">
+                <div>
+                  <h5 class="text-2xl font-black text-white">CHIEF GIUSEPPE</h5>
+                  <p class="text-xs font-black text-primary uppercase tracking-[0.3em]">Visionary Founder</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 md:py-60 px-6 text-center max-w-7xl mx-auto">
+      <h2
+        class="text-4xl md:text-7xl lg:text-[9rem] font-black text-white mb-16 tracking-tighter leading-none flex flex-row items-center justify-center gap-x-4 md:gap-x-12">
+        <span>STAY</span>
+        <div class="text-slider-container relative">
+          <!-- Ghost element for sizing - padding matches items -->
+          <span class="text-gradient invisible pointer-events-none select-none px-16">FOCUSED.</span>
+          <span class="text-slider-item text-gradient text-left">AHEAD.</span>
+          <span class="text-slider-item text-gradient text-left opacity-0">FOCUSED.</span>
+        </div>
+      </h2>
+      <div class="grid grid-cols-2 gap-4 md:gap-10 justify-center items-stretch max-w-4xl mx-auto">
+        <a href="https://wa.me/2348143168513" target="_blank"
+          class="btn-primary py-4 px-2 sm:py-6 sm:px-10 md:py-8 md:px-20 text-[10px] sm:text-base md:text-3xl font-black tracking-tighter flex items-center justify-center text-center leading-tight">
+          START YOUR EMPIRE
+        </a>
+        <a href="tel:+2348143168513" class="btn-outline py-4 px-2 sm:py-6 sm:px-10 md:py-8 md:px-20 text-[10px] sm:text-base md:text-3xl font-black tracking-tighter flex items-center justify-center text-center leading-tight">
+          CALL SUPPORT
+        </a>
+      </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="pb-24 md:pb-40 px-6 max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-10 mb-20">
+        <a href="mailto:giuseppehubb@gmail.com" class="glass-hover glass p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] text-center reveal-up flex flex-col justify-center">
+          <div class="w-12 h-12 md:w-16 md:h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-400 mx-auto mb-4 md:mb-8 shrink-0">
+            <i data-lucide="mail" class="w-6 h-6 md:w-8 md:h-8"></i>
+          </div>
+          <h4 class="text-base md:text-2xl font-black text-white mb-2 tracking-tight italic">Email Us</h4>
+          <p class="text-slate-500 font-bold text-[10px] sm:text-base break-all">giuseppehubb@gmail.com</p>
+        </a>
+        <div class="glass-hover glass p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] text-center reveal-up flex flex-col justify-center">
+          <div
+            class="w-12 h-12 md:w-16 md:h-16 bg-purple-600/10 rounded-2xl flex items-center justify-center text-purple-400 mx-auto mb-4 md:mb-8 shrink-0">
+            <i data-lucide="map-pin" class="w-6 h-6 md:w-8 md:h-8"></i>
+          </div>
+          <h4 class="text-base md:text-2xl font-black text-white mb-2 tracking-tight italic">Location</h4>
+          <p class="text-slate-500 font-bold text-xs sm:text-base">Anambra State, Nigeria</p>
+        </div>
+        <a href="https://wa.me/2348143168513" target="_blank"
+          class="glass-hover glass p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] text-center reveal-up flex flex-col justify-center col-span-2 md:col-span-1">
+          <div
+            class="w-12 h-12 md:w-16 md:h-16 bg-green-600/10 rounded-2xl flex items-center justify-center text-green-400 mx-auto mb-4 md:mb-8 shrink-0">
+            <i data-lucide="message-circle" class="w-6 h-6 md:w-8 md:h-8"></i>
+          </div>
+          <h4 class="text-base md:text-2xl font-black text-white mb-2 tracking-tight italic">Chat Now</h4>
+          <p class="text-slate-500 font-bold text-xs sm:text-base">+2348143168513</p>
+        </a>
+      </div>
+
+      <div
+        class="glass-dark p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] border-white/5 flex flex-col md:flex-row items-center justify-between gap-12 reveal-up">
+        <div class="flex items-center gap-10">
+          <div
+            class="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center text-primary shadow-2xl shadow-primary/20 shrink-0">
+            <i data-lucide="phone-call" class="w-12 h-12"></i>
+          </div>
+          <div>
+            <p class="text-slate-500 font-black uppercase tracking-[0.3em] text-xs mb-2">Service Hours</p>
+            <h4 class="text-3xl font-black text-white">Mon - Sat: 8am - 6pm</h4>
+          </div>
+        </div>
+        <a href="tel:+2348143168513" class="btn-primary py-6 px-16 text-xl font-black">
+          DIAL DIRECTLY
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-dark/80 backdrop-blur-3xl py-32 border-t border-white/5 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start gap-20 mb-32">
+        <div class="max-w-md">
+          <a href="#" class="text-5xl font-black text-white tracking-tighter mb-10 block">
+            GIUSEPPEHUB<span class="text-primary italic">.store</span>
+          </a>
+          <p class="text-xl text-slate-500 italic leading-relaxed font-medium">
+            "Empowering the next generation of African digital entrepreneurs through elite education and business
+            services."
+          </p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-20">
+          <div class="space-y-6">
+            <h6 class="text-white font-black uppercase tracking-widest text-xs">Explore</h6>
+            <ul class="space-y-4 text-slate-500 font-bold">
+              <li><a href="#about" class="hover:text-primary transition-colors">About</a></li>
+              <li><a href="#services" class="hover:text-primary transition-colors">Services</a></li>
+              <li><a href="#why-us" class="hover:text-primary transition-colors">Why Giuseppehub</a></li>
+            </ul>
+          </div>
+          <div class="space-y-6">
+            <h6 class="text-white font-black uppercase tracking-widest text-xs">Policies</h6>
+            <ul class="space-y-4 text-slate-500 font-bold">
+              <li><a href="#" class="hover:text-primary transition-colors">Privacy</a></li>
+              <li><a href="#" class="hover:text-primary transition-colors">Terms</a></li>
+              <li><a href="#" class="hover:text-primary transition-colors">Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between items-center gap-10 pt-16 border-t border-white/5">
+        <p class="text-slate-600 font-black uppercase tracking-widest text-[10px]">
+          &copy; <span id="year"></span> GIUSEPPE.store. BUILT FOR EXCELLENCE.
+        </p>
+        <p class="text-slate-600 font-black uppercase tracking-widest text-[10px]">
+          <a href="https://wa.me/2349137881452" target="_blank" class="hover:text-primary transition-colors">MADE BY
+            AKUTHEDEV</a>
+        </p>
+        <div class="flex gap-12 text-slate-600">
+          <a href="#" class="hover:text-white transition-all transform hover:scale-125"><i data-lucide="facebook"
+              class="w-6 h-6"></i></a>
+          <a href="#" class="hover:text-white transition-all transform hover:scale-125"><i data-lucide="instagram"
+              class="w-6 h-6"></i></a>
+          <a href="#" class="hover:text-white transition-all transform hover:scale-125"><i data-lucide="twitter"
+              class="w-6 h-6"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Lucide Configuration
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // GSAP Core Configuration
+    gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+    // Progress Bar & Navbar Logic
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      const progress = document.getElementById('progress-bar');
+
+      if (window.scrollY > 100) {
+        nav.classList.add('py-4');
+        nav.classList.remove('py-8');
+      } else {
+        nav.classList.add('py-8');
+        nav.classList.remove('py-4');
+      }
+
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      progress.style.width = scrolled + "%";
+    });
+
+    // Mobile Menu Logic
+    const menuBtn = document.getElementById('menu-btn');
+    const menuClose = document.getElementById('menu-close');
+    const menu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-click');
+
+    menuBtn.onclick = () => menu.classList.add('active');
+    menuClose.onclick = () => menu.classList.remove('active');
+    mobileLinks.forEach(l => l.onclick = () => menu.classList.remove('active'));
+
+    // Entrance Animations (GSAP)
+    const entranceTL = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.5 } });
+
+    entranceTL.to('.reveal-up', {
+      opacity: 1,
+      y: -30,
+      stagger: 0.1,
+      delay: 0.2
+    });
+
+    // Scroll Revegals
+    gsap.utils.toArray('.reveal-left').forEach(el => {
+      gsap.to(el, {
+        opacity: 1,
+        x: 0,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play reverse play reverse'
+        }
+      });
+      gsap.set(el, { x: -100, opacity: 0 });
+    });
+
+    gsap.utils.toArray('.reveal-right').forEach(el => {
+      gsap.to(el, {
+        opacity: 1,
+        x: 0,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play reverse play reverse'
+        }
+      });
+      gsap.set(el, { x: 100, opacity: 0 });
+    });
+
+    // Special Stagger for Why Us Section
+    gsap.to('.reveal-success-portrait', {
+      opacity: 1,
+      x: 0,
+      rotate: 0,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: '#why-us',
+        start: 'top 60%',
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+    gsap.set('.reveal-success-portrait', { x: 100, opacity: 0, rotate: 5 });
+
+    gsap.to('.reveal-testimonial-card', {
+      opacity: 1,
+      y: 0,
+      duration: 1.5,
+      delay: 0.3,
+      scrollTrigger: {
+        trigger: '#why-us',
+        start: 'top 60%',
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+    gsap.set('.reveal-testimonial-card', { y: 100, opacity: 0 });
+
+    gsap.utils.toArray('.reveal-up:not(.hero-content *)').forEach(el => {
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 90%',
+          toggleActions: 'play reverse play reverse'
+        }
+      });
+      gsap.set(el, { y: 50 });
+    });
+
+    // About Boxes Stagger
+    gsap.to('.about-box', {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 1,
+      stagger: 0.15,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: '#about',
+        start: 'top 60%',
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+    gsap.set('.about-box', { opacity: 0, y: 50, scale: 0.9 });
+
+    // Service Grid Stagger
+    gsap.to('.service-card', {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 1,
+      stagger: 0.1,
+      scrollTrigger: {
+        trigger: '#service-grid',
+        start: 'top 80%',
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+    gsap.set('.service-card', { opacity: 0, scale: 0.9, y: 50 });
+
+    // Final Scale Animation
+    gsap.to('.reveal-scale', {
+      opacity: 1,
+      scale: 1,
+      duration: 1.5,
+      ease: 'back.out(1.7)',
+      scrollTrigger: {
+        trigger: '.reveal-scale',
+        start: 'top 85%',
+        toggleActions: 'play reverse play reverse'
+      }
+    });
+    gsap.set('.reveal-scale', { scale: 0.5, opacity: 0 });
+
+    // Parallax Effects & Flashlight
+    const flashlight = document.getElementById('flashlight');
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = cursor.querySelector('.cursor-dot');
+    const cursorRing = cursor.querySelector('.cursor-ring');
+
+    window.addEventListener('mousemove', (e) => {
+      const { clientX, clientY } = e;
+
+      // Flashlight position
+      flashlight.style.setProperty('--x', `${clientX}px`);
+      flashlight.style.setProperty('--y', `${clientY}px`);
+      flashlight.style.opacity = '1';
+
+      // Custom Cursor position
+      gsap.to(cursor, { x: clientX - 16, y: clientY - 16, duration: 0.1 });
+
+      const moveX = (clientX - window.innerWidth / 2) * 0.01;
+      const moveY = (clientY - window.innerHeight / 2) * 0.01;
+
+      gsap.to('.aura', {
+        x: moveX * 5,
+        y: moveY * 5,
+        duration: 2,
+        ease: 'power2.out'
+      });
+    });
+
+    // Cursor Interactions
+    const interactiveElements = document.querySelectorAll('a, button, .service-card');
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        gsap.to(cursorDot, { scale: 1.5, duration: 0.3 });
+        gsap.to(cursorRing, { scale: 1.2, border: '1px solid rgba(255,255,255,0.8)', duration: 0.3 });
+      });
+      el.addEventListener('mouseleave', () => {
+        gsap.to(cursorDot, { scale: 0.5, duration: 0.3 });
+        gsap.to(cursorRing, { scale: 1, border: '1px solid rgba(255,255,255,0.3)', duration: 0.3 });
+      });
+    });
+
+    // Particle System
+    const particleContainer = document.getElementById('particle-container');
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 3 + 1;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+      particleContainer.appendChild(particle);
+
+      gsap.to(particle, {
+        y: `+=${Math.random() * 100 - 50}`,
+        x: `+=${Math.random() * 100 - 50}`,
+        duration: Math.random() * 10 + 5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }
+
+    // Lenis Smooth Scroll
+    const lenis = new Lenis({
+      duration: 0.5, // Reduced for faster response
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 1.2, // Increased for snappier feel
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    // Advanced Text Animations
+
+    // 1. Looping Text Slider (CTA)
+    const ctaSlides = document.querySelectorAll('.text-slider-item');
+    if (ctaSlides.length > 0) {
+      const ctaTL = gsap.timeline({ repeat: -1 });
+
+      // Start by ensuring AHEAD is the only one visible
+      ctaTL.set(ctaSlides, { opacity: 0, yPercent: 100 });
+      ctaTL.set(ctaSlides[0], { opacity: 1, yPercent: 0 });
+
+      // The loop:
+
+      // 1. AHEAD stays for 2 seconds
+      ctaTL.to({}, { duration: 2 });
+
+      // 2. Cross-fade: AHEAD out, FOCUSED in
+      ctaTL.to(ctaSlides[0], { yPercent: -100, opacity: 0, duration: 1, ease: "power3.inOut" });
+      ctaTL.fromTo(ctaSlides[1],
+        { yPercent: 100, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1, ease: "power3.out" },
+        "<0.05" // Near-instant switch-start to ensure something is always there
+      );
+
+      // 3. FOCUSED stays for 2 seconds
+      ctaTL.to({}, { duration: 2 });
+
+      // 4. Cross-fade: FOCUSED out, AHEAD in (back to start)
+      ctaTL.to(ctaSlides[1], { yPercent: -100, opacity: 0, duration: 1, ease: "power3.inOut" });
+      ctaTL.fromTo(ctaSlides[0],
+        { yPercent: 100, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1, ease: "power3.out" },
+        "<0.05"
+      );
+    }
+
+    // 2. Typewriter Hero Effect
+    const heroSection = document.querySelector('section'); // Define the hero section trigger
+
+    gsap.to("#typewriter-income", {
+      text: "INCOME",
+      duration: 3,
+      ease: "none",
+      delay: 0.5
+    });
+
+    // Fade away typewriter on scroll
+    if (heroSection) {
+      gsap.to("#typewriter-income", {
+        opacity: 0,
+        y: -50,
+        scrollTrigger: {
+          trigger: heroSection,
+          start: "top top",
+          end: "20% top",
+          scrub: true
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
